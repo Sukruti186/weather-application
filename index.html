@@ -38,8 +38,74 @@
             </div>
         </div> 
     </div>
+    <script>
+    const apiKey = "8b47b5eba1f37dcd08e3ce82b0309954";
+    const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    const searchBox = document.querySelector(".search input");
+    const searchBtn = document.querySelector(".search button");
+    const weatherIcon = document.querySelector(".weather-icon");
 
-<script>
+    async function checkWeather(city) {
+        const response = await fetch(apiurl + city + `&appid=${apiKey}`);
+
+        if (!response.ok) {
+            alert("City not found. Please enter a valid city name.");
+            return;
+        }
+
+        const data = await response.json();
+
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML =
+            Math.round(data.main.temp) + "°c";
+        document.querySelector(".humidity").innerHTML =
+            data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML =
+            data.wind.speed + " km/h";
+
+        const condition = data.weather[0].main.toLowerCase();
+
+        switch (condition) {
+            case "clouds":
+                weatherIcon.src = "assets/clouds.png";
+                break;
+            case "rain":
+                weatherIcon.src = "assets/rain.png";
+                break;
+            case "clear":
+                weatherIcon.src = "assets/clear.png";
+                break;
+            case "snow":
+                weatherIcon.src = "assets/snow.png";
+                break;
+            case "drizzle":
+                weatherIcon.src = "assets/drizzle.png";
+                break;
+            case "mist":
+            case "haze":
+            case "fog":
+                weatherIcon.src = "assets/mist.png";
+                break;
+        }
+
+        document.querySelector(".weather").style.display = "block";
+    }
+
+    // 🔍 Button click
+    searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value.trim());
+    });
+
+    // ⌨️ Press Enter key
+    searchBox.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+            checkWeather(searchBox.value.trim());
+        }
+    });
+</script>
+
+
+<!-- <script>
     const apiKey = "8b47b5eba1f37dcd08e3ce82b0309954";
     const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
     const searchBox = document.querySelector(".search input");
@@ -97,7 +163,7 @@
     searchBtn.addEventListener("click", () => {
         checkWeather(searchBox.value.trim());
     });
-</script>
+</script> -->
 
 
 </body>
